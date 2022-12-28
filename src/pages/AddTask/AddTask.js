@@ -10,6 +10,7 @@ const AddTask = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
@@ -51,6 +52,7 @@ const AddTask = () => {
             .then((result) => {
               console.log(result);
               toast.success(`${data.name} is added successfully`);
+              reset();
               //   navigate("/dashboard/myproducts");
             });
         }
