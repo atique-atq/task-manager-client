@@ -16,11 +16,9 @@ const Signup = () => {
     event.preventDefault();
     const form = event.target;
     const name = form.name.value;
-    const photoURL = form.photoUrl.value;
     const email = form.email.value;
     const password = form.password.value.toLowerCase();
     const confirm = form.confirmPassword.value;
-    const role = form.role.value;
 
     if (password.length < 6) {
       setError("Password should be 6 characters or more.");
@@ -40,7 +38,7 @@ const Signup = () => {
         console.log(user);
         setError("");
         form.reset();
-        handleUpdateUserProfile(name, photoURL, email, role);
+        handleUpdateUserProfile(name, email);
         navigate(from, { replace: true });
         toast.success("Registration Successful", {
           position: "top-right",
@@ -53,21 +51,21 @@ const Signup = () => {
       });
   };
 
-  const handleUpdateUserProfile = (name, photoURL, email, role) => {
+  const handleUpdateUserProfile = (name, email) => {
     const profile = {
       displayName: name,
-      photoURL: photoURL,
+      photoURL: "",
     };
 
     updateUserProfile(profile)
       .then(() => {
-        saveUser(name, email, role);
+        saveUser(name, email);
       })
       .catch((error) => console.error(error));
   };
 
-  const saveUser = (name, email, role) => {
-    const user = { name, email, role };
+  const saveUser = (name, email) => {
+    const user = { name, email };
     fetch("http://localhost:5000/saveusers", {
       method: "POST",
       headers: {

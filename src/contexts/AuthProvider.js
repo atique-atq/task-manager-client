@@ -31,7 +31,6 @@ const AuthProvider = ({ children }) => {
   };
 
   const googleSignIn = (provider) => {
-    console.log("started here");
     setLoading(true);
     return signInWithPopup(auth, provider).finally(() => {
       setLoading(false);
