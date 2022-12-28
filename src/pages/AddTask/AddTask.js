@@ -39,21 +39,20 @@ const AddTask = () => {
             creationTime: new Date(),
           };
 
-          // save product information to the database
-          //   fetch("https://sharewear-server.vercel.app/products", {
-          //     method: "POST",
-          //     headers: {
-          //       "content-type": "application/json",
-          //       authorization: `bearer ${localStorage.getItem('accessToken')}`
-          //     },
-          //     body: JSON.stringify(product),
-          //   })
-          // .then((res) => res.json())
-          // .then((result) => {
-          //   console.log(result);
-          //   toast.success(`${data.name} is added successfully`);
-          //   navigate("/dashboard/myproducts");
-          // });
+          //   save product information to the database
+          fetch("http://localhost:5000/task", {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify(task),
+          })
+            .then((res) => res.json())
+            .then((result) => {
+              console.log(result);
+              toast.success(`${data.name} is added successfully`);
+              //   navigate("/dashboard/myproducts");
+            });
         }
       });
   };
