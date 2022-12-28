@@ -12,50 +12,62 @@ const AddTask = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({ defaultValues: {} });
 
   const imageHostKey = process.env.REACT_APP_imgbb_key;
   const navigate = useNavigate();
 
+  const handleUserKeyPress = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      // e.preventDefault();
+      handleSubmit(handleAddTask)();
+    }
+  };
+
   const handleAddTask = (data) => {
-    console.log("---", data);
+    let imageUrl = "";
     const image = data.image[0];
-    const formData = new FormData();
-    formData.append("image", image);
-    const url = `https://api.imgbb.com/1/upload?key=${imageHostKey}`;
-    fetch(url, {
+
+    if (image) {
+      const formData = new FormData();
+      formData.append("image", image);
+      const url = `https://api.imgbb.com/1/upload?key=${imageHostKey}`;
+      fetch(url, {
+        method: "POST",
+        body: formData,
+      })
+        .then((res) => res.json())
+        .then((imgData) => {
+          console.log("imgData:", imgData);
+          imageUrl = imgData.data.url;
+        });
+    }
+
+    const task = {
+      image: imageUrl,
+      description: data.description,
+      name: data.name,
+      createdEmail: user?.email,
+      status: "not completed",
+      creationTime: new Date(),
+    };
+
+    console.log("data to be inserted", task);
+
+    //   save product information to the database
+    fetch("http://localhost:5000/task", {
       method: "POST",
-      body: formData,
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(task),
     })
       .then((res) => res.json())
-      .then((imgData) => {
-        if (imgData.success) {
-          console.log(data);
-          const task = {
-            image: imgData.data.url,
-            description: data.description,
-            name: data.name,
-            createdEmail: user?.email,
-            status: "not completed",
-            creationTime: new Date(),
-          };
-
-          //   save product information to the database
-          fetch("http://localhost:5000/task", {
-            method: "POST",
-            headers: {
-              "content-type": "application/json",
-            },
-            body: JSON.stringify(task),
-          })
-            .then((res) => res.json())
-            .then((result) => {
-              console.log(result);
-              toast.success(`${data.name} is added successfully`);
-              reset();
-              //   navigate("/dashboard/myproducts");
-            });
-        }
+      .then((result) => {
+        console.log(result);
+        toast.success(`${data.name} is added successfully`);
+        reset();
+        // navigate("/dashboard/myproducts");
       });
   };
 
@@ -81,6 +93,7 @@ const AddTask = () => {
 
                 <input
                   type="text"
+                  onKeyPress={handleUserKeyPress}
                   {...register("name", {
                     required: "Task Name is Required",
                   })}
@@ -102,6 +115,7 @@ const AddTask = () => {
                 </label>
                 <textarea
                   rows={6}
+                  onKeyPress={handleUserKeyPress}
                   type="text"
                   {...register("description", {
                     required: "Description is Required",
