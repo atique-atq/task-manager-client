@@ -4,6 +4,7 @@ import DisplayError from "../../pages/Shared/DisplayError/DisplayError";
 import Home from "../../pages/Home/Home";
 import AddTask from "../../pages/AddTask/AddTask";
 import Login from "../../pages/Login/Login";
+import Signup from "../../pages/Signup/Signup";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login></Login>,
+      },
+      {
+        path: "/signup",
+        element: <Signup></Signup>,
       },
     ],
   },

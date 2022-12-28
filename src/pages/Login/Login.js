@@ -103,20 +103,13 @@ const Login = () => {
               OR
             </div>
             <hr />
-            {/* <button
-              className="border-2 rounded-none my-0 py-0 flex justify-center items-center"
-              onClick={handleGoogleSignIn}
-            >
-              <div className="px-3 text-orange-400 w-10/12 md:w-7/12">
-                {" "}
-                <FaGoogle></FaGoogle>
-                <h2>Login with Google</h2>
-              </div>
-            </button> */}
 
             <div className="flex justify-center">
-              <div className="input input-bordered mt-2 w-10/12 md:w-7/12 ml-3 bg-blue-300 text-center p-3 rounded-lg hover:bg-white hover:cursor-pointer text-slate-800">
-                Login with Google
+              <div
+                onClick={handleGoogleSignIn}
+                className="input input-bordered mt-2 w-10/12 md:w-7/12 ml-3 bg-blue-300 text-center p-3 rounded-lg hover:bg-white hover:cursor-pointer text-slate-800 flex items-center justify-center"
+              >
+                <FaGoogle className="mr-2"></FaGoogle> Login with Google
               </div>
             </div>
           </div>
