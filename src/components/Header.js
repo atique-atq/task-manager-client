@@ -45,7 +45,11 @@ const Header = () => {
         <header className={classes.header}>
             <div className={classes.header__content}>
                 <Link to="/" className={classes.header__content__logo}>
-                    navbar
+                <span className="flex justify-center items-center">
+                <img src="https://homearcbd.com/wp-content/uploads/2022/11/HOME-ARC-BD-LOGO.svg" className="mr-3 h-16" alt="HomeArc Logo" />
+                <span> TaskTracer</span>
+                </span>
+             
                 </Link>
                 <nav
                     className={`${classes.header__content__nav} ${
