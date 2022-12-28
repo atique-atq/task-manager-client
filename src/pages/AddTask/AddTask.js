@@ -47,7 +47,7 @@ const AddTask = () => {
       image: imageUrl,
       description: data.description,
       name: data.name,
-      createdEmail: "user?.email",
+      createdEmail: user?.email,
       status: "not completed",
       creationTime: new Date(),
     };
