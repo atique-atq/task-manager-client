@@ -54,7 +54,7 @@ const AddTask = () => {
     console.log("data to be inserted", task);
 
     //   save product information to the database
-    fetch("http://localhost:5000/task", {
+    fetch("https://task-manager-server-rho.vercel.app/task", {
       method: "POST",
       headers: {
         "content-type": "application/json",

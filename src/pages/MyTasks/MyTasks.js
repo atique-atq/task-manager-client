@@ -2,11 +2,13 @@ import React, { useContext } from "react";
 import { AuthContext } from "../../contexts/AuthProvider";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const MyTasks = () => {
   const { user, loading } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  const url = `http://localhost:5000/todotasks`;
+  const url = `https://task-manager-server-rho.vercel.app/todotasks`;
   const { data: myTasks, refetch } = useQuery({
     queryKey: ["myTasks"],
     queryFn: async () => {
@@ -17,7 +19,7 @@ const MyTasks = () => {
   });
 
   const handleCompleteTask = (_id) => {
-    let completeUrl = `http://localhost:5000/complete?id=${_id}`;
+    let completeUrl = `https://task-manager-server-rho.vercel.app/complete?id=${_id}`;
     fetch(completeUrl, {
       method: "PUT",
       headers: {},
@@ -26,14 +28,14 @@ const MyTasks = () => {
       .then((data) => {
         if (data.modifiedCount > 0) {
           toast.success(`Task has been marked Completed`);
-          refetch();
+          navigate("/compltedtasks");
         }
       });
   };
 
   return (
     <div
-      className=" dark:bg-slate-800 px-2 md:px-6 py-8 mx-1 md:mx-12 ring-1 ring-slate-900/5 shadow-xl"
+      className="dark:bg-slate-800 px-2 md:px-6 py-8 mx-1 md:mx-12 ring-1 ring-slate-900/5 shadow-xl"
       style={{ minHeight: "100vh" }}
     >
       <div className="m-4">

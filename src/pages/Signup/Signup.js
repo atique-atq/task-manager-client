@@ -66,7 +66,7 @@ const Signup = () => {
 
   const saveUser = (name, email) => {
     const user = { name, email };
-    fetch("http://localhost:5000/saveusers", {
+    fetch("https://task-manager-server-rho.vercel.app/saveusers", {
       method: "POST",
       headers: {
         "content-type": "application/json",
