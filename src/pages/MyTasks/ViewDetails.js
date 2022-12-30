@@ -13,7 +13,7 @@ const ViewDetails = () => {
   const navigate = useNavigate();
 
   const handleCompleteTask = (_id) => {
-    let completeUrl = `http://localhost:5000/complete?id=${_id}`;
+    let completeUrl = `https://task-manager-server-rho.vercel.app/complete?id=${_id}`;
     fetch(completeUrl, {
       method: "PUT",
       headers: {},

@@ -44,7 +44,9 @@ const router = createBrowserRouter([
       {
         path: "/details/:id",
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/details/${params.id}`),
+          fetch(
+            `https://task-manager-server-rho.vercel.app/details/${params.id}`
+          ),
         element: (
           <PrivateRoute>
             <ViewDetails></ViewDetails>
@@ -54,7 +56,9 @@ const router = createBrowserRouter([
       {
         path: "/edit/:id",
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/details/${params.id}`),
+          fetch(
+            `https://task-manager-server-rho.vercel.app/details/${params.id}`
+          ),
         element: <EditTask></EditTask>,
       },
     ],
