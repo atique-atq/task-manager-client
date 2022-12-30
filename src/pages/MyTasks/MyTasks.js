@@ -2,13 +2,13 @@ import React, { useContext } from "react";
 import { AuthContext } from "../../contexts/AuthProvider";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 const MyTasks = () => {
   const { user, loading } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const url = `https://task-manager-server-rho.vercel.app/todotasks`;
+  const url = `http://localhost:5000/todotasks`;
   const { data: myTasks, refetch } = useQuery({
     queryKey: ["myTasks"],
     queryFn: async () => {
@@ -19,7 +19,7 @@ const MyTasks = () => {
   });
 
   const handleCompleteTask = (_id) => {
-    let completeUrl = `https://task-manager-server-rho.vercel.app/complete?id=${_id}`;
+    let completeUrl = `http://localhost:5000/complete?id=${_id}`;
     fetch(completeUrl, {
       method: "PUT",
       headers: {},
@@ -78,7 +78,7 @@ const MyTasks = () => {
 
                   <td className="py-4 px-2">
                     <h1 className="font-medium border-2 border-slate-400 px-0 text-center rounded-lg py-2 text-blue-600 dark:text-blue-800 bg-[#a2a2f6] hover:bg-slate-500 hover:cursor-pointer">
-                      View Details
+                      <Link to={`/details/${task._id}`}>View Details</Link>
                     </h1>
                   </td>
 

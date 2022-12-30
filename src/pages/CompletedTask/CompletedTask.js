@@ -2,12 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthProvider";
+import toast from "react-hot-toast";
 
 const CompletedTask = () => {
   const { user, loading } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const url = `https://task-manager-server-rho.vercel.app/completedtasks`;
+  const url = `http://localhost:5000/completedtasks`;
   const { data: completedTasks, refetch } = useQuery({
     queryKey: ["completedTasks"],
     queryFn: async () => {
@@ -16,6 +17,21 @@ const CompletedTask = () => {
       return data;
     },
   });
+
+  const handleNotCompleteTask = (_id) => {
+    let completeUrl = `http://localhost:5000/notcomplete?id=${_id}`;
+    fetch(completeUrl, {
+      method: "PUT",
+      headers: {},
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.modifiedCount > 0) {
+          toast.success("Moved to My Tasks");
+          navigate("/mytasks");
+        }
+      });
+  };
 
   return (
     <div
@@ -67,7 +83,10 @@ const CompletedTask = () => {
                   </td>
 
                   <td className="py-4 px-1">
-                    <h1 className="font-medium border-2 border-slate-400 px-0 text-center rounded-lg py-2 text-white-600 dark:text-white bg-slate-500 hover:bg-slate-500 hover:cursor-pointer">
+                    <h1
+                      onClick={() => handleNotCompleteTask(task._id)}
+                      className="font-medium border-2 border-slate-400 px-0 text-center rounded-lg py-2 text-white-600 dark:text-white bg-slate-500 hover:bg-slate-500 hover:cursor-pointer"
+                    >
                       Not Completed
                     </h1>
                   </td>

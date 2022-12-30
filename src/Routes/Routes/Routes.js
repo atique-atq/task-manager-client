@@ -7,6 +7,8 @@ import Login from "../../pages/Login/Login";
 import Signup from "../../pages/Signup/Signup";
 import MyTasks from "../../pages/MyTasks/MyTasks";
 import CompletedTask from "../../pages/CompletedTask/CompletedTask";
+import PrivateRoute from "../PrivateRoute/PrivateRoute";
+import ViewDetails from "../../pages/MyTasks/ViewDetails";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +39,16 @@ const router = createBrowserRouter([
       {
         path: "/compltedtasks",
         element: <CompletedTask></CompletedTask>,
+      },
+      {
+        path: "/details/:id",
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/details/${params.id}`),
+        element: (
+          <PrivateRoute>
+            <ViewDetails></ViewDetails>
+          </PrivateRoute>
+        ),
       },
     ],
   },

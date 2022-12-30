@@ -8,6 +8,7 @@ import { AuthContext } from "../../contexts/AuthProvider";
 const Login = () => {
   const { signIn, googleSignIn, loading } = useContext(AuthContext);
   const googleProvider = new GoogleAuthProvider();
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -18,6 +19,7 @@ const Login = () => {
       .then((result) => {
         const user = result.user;
         saveUser(user.displayName, user.email);
+        navigate(from, { replace: true });
       })
       .catch((error) => {
         console.error(error);
@@ -26,7 +28,7 @@ const Login = () => {
 
   const saveUser = (name, email) => {
     const user = { name, email };
-    fetch("https://task-manager-server-rho.vercel.app/saveusers", {
+    fetch("http://localhost:5000/saveusers", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -53,6 +55,7 @@ const Login = () => {
         console.log("error:", er);
         toast.error("wrong credential");
         form.reset();
+        navigate(from, { replace: true });
       });
   };
 

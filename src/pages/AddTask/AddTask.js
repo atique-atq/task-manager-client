@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../../contexts/AuthProvider";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 
 const AddTask = () => {
   const { user, loading } = useContext(AuthContext);
+  const [imgUrl, setImgUrl] = useState("");
 
   const {
     register,
@@ -25,48 +26,47 @@ const AddTask = () => {
   };
 
   const handleAddTask = (data) => {
-    let imageUrl = "";
     const image = data.image[0];
 
-    if (image) {
-      const formData = new FormData();
-      formData.append("image", image);
-      const url = `https://api.imgbb.com/1/upload?key=${imageHostKey}`;
-      fetch(url, {
-        method: "POST",
-        body: formData,
-      })
-        .then((res) => res.json())
-        .then((imgData) => {
-          console.log("imgData:", imgData);
-          imageUrl = imgData.data.url;
-        });
-    }
-
-    const task = {
-      image: imageUrl,
-      description: data.description,
-      name: data.name,
-      createdEmail: user?.email,
-      status: "not completed",
-      creationTime: new Date(),
-    };
-    console.log("data to be inserted", task);
-
-    //   save product information to the database
-    fetch("https://task-manager-server-rho.vercel.app/task", {
+    const formData = new FormData();
+    formData.append("image", image);
+    const url = `https://api.imgbb.com/1/upload?key=${imageHostKey}`;
+    fetch(url, {
       method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(task),
+      body: formData,
     })
       .then((res) => res.json())
-      .then((result) => {
-        console.log(result);
-        toast.success(`${data.name} is added successfully`);
-        reset();
-        // navigate("/dashboard/myproducts");
+      .then((imgData) => {
+        console.log("imgData:", imgData);
+        setImgUrl(imgData.data.url);
+      })
+      .finally(() => {
+        const task = {
+          image: imgUrl,
+          description: data.description,
+          name: data.name,
+          createdEmail: user?.email,
+          status: "not completed",
+          creationTime: new Date(),
+        };
+
+        console.log("data to be inserted", task);
+
+        //   save product information to the database
+        fetch("http://localhost:5000/task", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(task),
+        })
+          .then((res) => res.json())
+          .then((result) => {
+            console.log(result);
+            toast.success(`${data.name} is added successfully`);
+            reset();
+            navigate("/mytasks");
+          });
       });
   };
 
