@@ -24,7 +24,10 @@ const ViewDetails = () => {
             <h1 className="text-blue-100 pt-3">
               Task Creation Time: {postingDate}
             </h1>
-            {createdBy && <h1>Created By: {createdBy}</h1>}
+
+            {createdBy && (
+              <h1 className="mt-12 text-blue-300">Created By: {createdBy}</h1>
+            )}
           </div>
           <div>
             <img src={task?.image} alt="" />

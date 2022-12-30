@@ -6,7 +6,6 @@ import toast from "react-hot-toast";
 
 const AddTask = () => {
   const { user, loading } = useContext(AuthContext);
-  const [imgUrl, setImgUrl] = useState("");
 
   const {
     register,
@@ -28,46 +27,72 @@ const AddTask = () => {
   const handleAddTask = (data) => {
     const image = data.image[0];
 
-    const formData = new FormData();
-    formData.append("image", image);
-    const url = `https://api.imgbb.com/1/upload?key=${imageHostKey}`;
-    fetch(url, {
-      method: "POST",
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((imgData) => {
-        console.log("imgData:", imgData);
-        setImgUrl(imgData.data.url);
+    if (image) {
+      console.log("image ase from form");
+
+      const formData = new FormData();
+      formData.append("image", image);
+      const url = `https://api.imgbb.com/1/upload?key=${imageHostKey}`;
+      fetch(url, {
+        method: "POST",
+        body: formData,
       })
-      .finally(() => {
-        const task = {
-          image: imgUrl,
-          description: data.description,
-          name: data.name,
-          createdEmail: user?.email,
-          status: "not completed",
-          creationTime: new Date(),
-        };
+        .then((res) => res.json())
+        .then((imgData) => {
+          let imgbbUrl = imgData.data.url;
+          console.log("inside image data:", imgData.data);
+          const task = {
+            image: imgbbUrl,
+            description: data.description,
+            name: data.name,
+            createdEmail: user?.email,
+            status: "not completed",
+            creationTime: new Date(),
+          };
 
-        console.log("data to be inserted", task);
+          // save task to the database
+          fetch("http://localhost:5000/task", {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify(task),
+          })
+            .then((res) => res.json())
+            .then((result) => {
+              console.log(result);
+              toast.success(`${data.name} is added successfully`);
+              reset();
+              navigate("/mytasks");
+            });
+        });
+    } else {
+      console.log("Form theke data pai nai");
+      const task = {
+        image: "",
+        description: data.description,
+        name: data.name,
+        createdEmail: user?.email,
+        status: "not completed",
+        creationTime: new Date(),
+      };
 
-        //   save product information to the database
-        fetch("http://localhost:5000/task", {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify(task),
-        })
-          .then((res) => res.json())
-          .then((result) => {
-            console.log(result);
-            toast.success(`${data.name} is added successfully`);
-            reset();
-            navigate("/mytasks");
-          });
-      });
+      // save task to the database
+      fetch("http://localhost:5000/task", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(task),
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          console.log(result);
+          toast.success(`${data.name} is added successfully`);
+          reset();
+          navigate("/mytasks");
+        });
+    }
   };
 
   return (
