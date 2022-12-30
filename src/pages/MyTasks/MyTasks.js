@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { AuthContext } from "../../contexts/AuthProvider";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link,  useNavigate } from "react-router-dom";
 
 const MyTasks = () => {
   const { user, loading } = useContext(AuthContext);

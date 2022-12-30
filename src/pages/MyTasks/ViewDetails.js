@@ -1,6 +1,7 @@
 import React from "react";
-import { useLoaderData } from "react-router-dom";
+import { Navigate, useLoaderData, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
+import { toast } from "react-hot-toast";
 
 const ViewDetails = () => {
   const task = useLoaderData();
@@ -9,6 +10,22 @@ const ViewDetails = () => {
     ? format(Date.parse(task?.deadline), "P")
     : "";
   const createdBy = task?.createdEmail;
+  const navigate = useNavigate();
+
+  const handleCompleteTask = (_id) => {
+    let completeUrl = `http://localhost:5000/complete?id=${_id}`;
+    fetch(completeUrl, {
+      method: "PUT",
+      headers: {},
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.modifiedCount > 0) {
+          toast.success(`Task has been marked Completed`);
+          navigate("/compltedtasks");
+        }
+      });
+  };
   return (
     <div
       className="dark:bg-slate-800 px-2 md:px-6 py-8 mx-1 md:mx-12 ring-1 ring-slate-900/5 shadow-xl"
@@ -39,9 +56,16 @@ const ViewDetails = () => {
                 Created By: {createdBy}
               </h1>
             )}
+
+            <h1
+              onClick={() => handleCompleteTask(task._id)}
+              className="w-6/12 mt-10 font-medium border-2 border-slate-400 px-0 text-center rounded-lg py-2 text-blue-600 dark:text-blue-700 bg-green-300 hover:bg-slate-500 hover:cursor-pointer"
+            >
+              Complete Task
+            </h1>
           </div>
           <div>
-            <img src={task?.image} alt="" />
+            <img className="pt-4" src={task?.image} alt="" />
           </div>
         </div>
       </div>
