@@ -49,14 +49,11 @@ const EditTask = () => {
             image: imgbbUrl,
           };
           // update task
-          fetch(
-            `https://task-manager-server-rho.vercel.app/update?id=${task._id}`,
-            {
-              method: "PATCH",
-              headers: { "content-type": "application/json" },
-              body: JSON.stringify(updatedTask),
-            }
-          )
+          fetch(`https://task-mager.vercel.app/update?id=${task._id}`, {
+            method: "PATCH",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify(updatedTask),
+          })
             .then((res) => res.json())
             .then((result) => {
               console.log(result);
@@ -74,14 +71,11 @@ const EditTask = () => {
       console.log("Form theke image pai nai");
 
       // update task
-      fetch(
-        `https://task-manager-server-rho.vercel.app/update?id=${task._id}`,
-        {
-          method: "PATCH",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify(updatedTask),
-        }
-      )
+      fetch(`https://task-mager.vercel.app/update?id=${task._id}`, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(updatedTask),
+      })
         .then((res) => res.json())
         .then((result) => {
           console.log(result);

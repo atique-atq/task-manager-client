@@ -8,7 +8,7 @@ const CompletedTask = () => {
   const { user, loading } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const url = `https://task-manager-server-rho.vercel.app/completedtasks`;
+  const url = `https://task-mager.vercel.app/completedtasks`;
   const { data: completedTasks, refetch } = useQuery({
     queryKey: ["completedTasks"],
     queryFn: async () => {
@@ -19,7 +19,7 @@ const CompletedTask = () => {
   });
 
   const handleNotCompleteTask = (_id) => {
-    let completeUrl = `https://task-manager-server-rho.vercel.app/notcomplete?id=${_id}`;
+    let completeUrl = `https://task-mager.vercel.app/notcomplete?id=${_id}`;
     fetch(completeUrl, {
       method: "PUT",
       headers: {},
@@ -36,7 +36,7 @@ const CompletedTask = () => {
   const handleDeleteTask = (_id) => {
     let answer = window.confirm("Want to Delete the task?");
     if (answer) {
-      let deleteUrl = `https://task-manager-server-rho.vercel.app/delete?id=${_id}`;
+      let deleteUrl = `https://task-mager.vercel.app/delete?id=${_id}`;
       fetch(deleteUrl, {
         method: "DELETE",
         headers: {},

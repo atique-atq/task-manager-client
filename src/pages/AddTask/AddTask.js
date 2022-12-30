@@ -52,7 +52,7 @@ const AddTask = () => {
           };
 
           // save task to the database
-          fetch("https://task-manager-server-rho.vercel.app/task", {
+          fetch("https://task-mager.vercel.app/task", {
             method: "POST",
             headers: {
               "content-type": "application/json",
@@ -80,7 +80,7 @@ const AddTask = () => {
       };
 
       // save task to the database
-      fetch("https://task-manager-server-rho.vercel.app/task", {
+      fetch("https://task-mager.vercel.app/task", {
         method: "POST",
         headers: {
           "content-type": "application/json",

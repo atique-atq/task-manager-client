@@ -28,7 +28,7 @@ const Login = () => {
 
   const saveUser = (name, email) => {
     const user = { name, email };
-    fetch("https://task-manager-server-rho.vercel.app/saveusers", {
+    fetch("https://task-mager.vercel.app/saveusers", {
       method: "POST",
       headers: {
         "content-type": "application/json",

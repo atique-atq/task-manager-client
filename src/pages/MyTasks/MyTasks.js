@@ -8,7 +8,7 @@ const MyTasks = () => {
   const { user, loading } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const url = `https://task-manager-server-rho.vercel.app/todotasks`;
+  const url = `https://task-mager.vercel.app/todotasks`;
   const { data: myTasks, refetch } = useQuery({
     queryKey: ["myTasks"],
     queryFn: async () => {
@@ -19,7 +19,7 @@ const MyTasks = () => {
   });
 
   const handleCompleteTask = (_id) => {
-    let completeUrl = `https://task-manager-server-rho.vercel.app/complete?id=${_id}`;
+    let completeUrl = `https://task-mager.vercel.app/complete?id=${_id}`;
     fetch(completeUrl, {
       method: "PUT",
       headers: {},
