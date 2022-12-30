@@ -1,30 +1,30 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
+import { useLoaderData } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthProvider";
-import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
-const AddTask = () => {
+const EditTask = () => {
+  const task = useLoaderData();
+  console.log("task id:", task._id);
   const { user, loading } = useContext(AuthContext);
-
+  const imageHostKey = process.env.REACT_APP_imgbb_key;
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({ defaultValues: {} });
+  } = useForm({
+    defaultValues: {
+      name: task?.name,
+      description: task?.description,
+      deadline: task?.deadline,
+    },
+  });
 
-  const imageHostKey = process.env.REACT_APP_imgbb_key;
-  const navigate = useNavigate();
-
-  const handleUserKeyPress = (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      // e.preventDefault();
-      handleSubmit(handleAddTask)();
-    }
-  };
-
-  const handleAddTask = (data) => {
+  const handleEditTask = (data) => {
     const image = data.image[0];
 
     if (image) {
@@ -41,56 +41,45 @@ const AddTask = () => {
         .then((imgData) => {
           let imgbbUrl = imgData.data.url;
           console.log("inside image data:", imgData.data);
-          const task = {
-            image: imgbbUrl,
-            description: data.description,
-            name: data.name,
-            createdEmail: user?.email,
-            deadline: data.deadline,
-            status: "not completed",
-            creationTime: new Date(),
-          };
 
-          // save task to the database
-          fetch("http://localhost:5000/task", {
-            method: "POST",
-            headers: {
-              "content-type": "application/json",
-            },
-            body: JSON.stringify(task),
+          let updatedTask = {
+            name: data.name,
+            description: data.description,
+            deadline: data.deadline,
+            image: imgbbUrl,
+          };
+          // update task
+          fetch(`http://localhost:5000/update?id=${task._id}`, {
+            method: "PATCH",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify(updatedTask),
           })
             .then((res) => res.json())
             .then((result) => {
               console.log(result);
-              toast.success(`${data.name} is added successfully`);
+              toast.success(`${data.name} is updated`);
               reset();
               navigate("/mytasks");
             });
         });
     } else {
-      console.log("Form theke data pai nai");
-      const task = {
-        image: "",
-        description: data.description,
+      let updatedTask = {
         name: data.name,
-        createdEmail: user?.email,
+        description: data.description,
         deadline: data.deadline,
-        status: "not completed",
-        creationTime: new Date(),
       };
+      console.log("Form theke image pai nai");
 
-      // save task to the database
-      fetch("http://localhost:5000/task", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify(task),
+      // update task
+      fetch(`http://localhost:5000/update?id=${task._id}`, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(updatedTask),
       })
         .then((res) => res.json())
         .then((result) => {
           console.log(result);
-          toast.success(`${data.name} is added successfully`);
+          toast.success(`${data.name} is updated`);
           reset();
           navigate("/mytasks");
         });
@@ -100,12 +89,12 @@ const AddTask = () => {
   return (
     <div>
       <div className="w-full md:w-10/12 p-7 mx-auto">
-        <h2 className="text-2xl text-[#0DA5E9] md:text-center text-left font-bold">
-          Add a Task
+        <h2 className="text-2xl text-[#a2a2f6] md:text-center text-left font-bold">
+          Edit Task
         </h2>
         <form
-          onSubmit={handleSubmit(handleAddTask)}
-          className="border border-indigo-400 shadow-lg py-12 px-3 md:px-6 mt-3 mx-auto"
+          onSubmit={handleSubmit(handleEditTask)}
+          className="border border-indigo-400 shadow-lg py-12 px-3 md:px-6 mt-3 mx-auto text-slate-600"
         >
           <div>
             <div className="form-control w-full p-2 mb-3">
@@ -113,17 +102,16 @@ const AddTask = () => {
                 <label className="label">
                   {" "}
                   <span className="label-text text-white mr-1 md:mr-5">
-                    Task Name:
+                    Edit Name:
                   </span>
                 </label>
 
                 <input
                   type="text"
-                  onKeyPress={handleUserKeyPress}
                   {...register("name", {
                     required: "Task Name is Required",
                   })}
-                  className="input input-bordered w-full rounded-none bg-slate-300"
+                  className="input input-bordered w-full rounded-none bg-slate-300 ml-1"
                 />
               </div>
               {errors.name && (
@@ -131,22 +119,21 @@ const AddTask = () => {
               )}
             </div>
 
-            <div className="form-control w-full p-2 mb-3">
+            <div className="form-control w-full p-0 mb-3">
               <div className="flex input-bordered rounded-none">
                 <label className="label">
                   {" "}
-                  <span className="label-text text-white mr-1 md:mr-3">
-                    Description:
+                  <span className="label-text text-white mr-0 pr-0">
+                    Edit description
                   </span>
                 </label>
                 <textarea
-                  rows={6}
-                  onKeyPress={handleUserKeyPress}
+                  rows={4}
                   type="text"
                   {...register("description", {
                     required: "Description is Required",
                   })}
-                  className="input input-bordered w-full rounded-none bg-slate-300 p-3"
+                  className="input input-bordered w-full rounded-none bg-slate-300 p-3 mr-0"
                 />
               </div>
               {errors.description && (
@@ -156,12 +143,12 @@ const AddTask = () => {
               )}
             </div>
 
-            <div className="form-control w-full p-2 mb-3 flex justify-between">
+            <div className="form-control w-full p-2 mb-3 flex flex-col md:flex-row justify-between">
               <div className="flex input-bordered rounded-none">
                 <label className="label">
                   {" "}
-                  <span className="label-text text-white mr-1">
-                    Estimated Deadline:
+                  <span className="label-text text-white mr-2 md:mr-6">
+                    Edit Deadline:
                   </span>
                 </label>
 
@@ -172,11 +159,11 @@ const AddTask = () => {
                 />
               </div>
 
-              <div className="flex justify-center items-center max-w-lg ml-4">
+              <div className="flex justify-center items-center max-w-lg ml-4 mt-6 md:mt-1">
                 <label className="label">
                   {" "}
                   <span className="label-text text-white mr-1 md:mr-5">
-                    Upload Photo:
+                    New Photo:
                   </span>
                 </label>
                 <input
@@ -194,8 +181,8 @@ const AddTask = () => {
 
             <div className="flex justify-center items-center">
               <input
-                className="bg-[#0DA5E9] p-3 md:w-80 w-64 rounded-md mt-1 hover:cursor-pointer hover:bg-white"
-                value="Add Task"
+                className="bg-[#a2a2f6] p-3 md:w-80 w-64 rounded-md mt-1 hover:cursor-pointer hover:bg-white"
+                value="Update Task"
                 type="submit"
               />
             </div>
@@ -206,4 +193,4 @@ const AddTask = () => {
   );
 };
 
-export default AddTask;
+export default EditTask;

@@ -9,6 +9,7 @@ import MyTasks from "../../pages/MyTasks/MyTasks";
 import CompletedTask from "../../pages/CompletedTask/CompletedTask";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
 import ViewDetails from "../../pages/MyTasks/ViewDetails";
+import EditTask from "../../pages/MyTasks/EditTask";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,12 @@ const router = createBrowserRouter([
             <ViewDetails></ViewDetails>
           </PrivateRoute>
         ),
+      },
+      {
+        path: "/edit/:id",
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/details/${params.id}`),
+        element: <EditTask></EditTask>,
       },
     ],
   },

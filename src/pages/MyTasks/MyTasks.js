@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { AuthContext } from "../../contexts/AuthProvider";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { Link,  useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const MyTasks = () => {
   const { user, loading } = useContext(AuthContext);
@@ -55,6 +55,7 @@ const MyTasks = () => {
                   Description
                 </th>
                 <th scope="col" className="py-3 px-1"></th>
+                <th scope="col" className="py-3 px-1"></th>
                 <th scope="col" className="py-3 px-2"></th>
               </tr>
             </thead>
@@ -73,21 +74,27 @@ const MyTasks = () => {
                   </th>
                   <td className="py-4 px-6">{`${task.description.substring(
                     0,
-                    100
+                    60
                   )}...`}</td>
 
                   <td className="py-4 px-2">
-                    <h1 className="font-medium border-2 border-slate-400 px-0 text-center rounded-lg py-2 text-blue-600 dark:text-blue-800 bg-[#a2a2f6] hover:bg-slate-500 hover:cursor-pointer">
-                      <Link to={`/details/${task._id}`}>View Details</Link>
+                    <h1 className="font-medium border-2 border-slate-400 px-2 text-center rounded-lg py-2 text-blue-600 dark:text-blue-800 bg-[#a2a2f6] hover:bg-slate-500 hover:cursor-pointer">
+                      <Link to={`/details/${task._id}`}> Details</Link>
+                    </h1>
+                  </td>
+
+                  <td className="py-4 px-2">
+                    <h1 className="font-medium border-2 border-slate-400 px-4 text-center rounded-lg py-2 text-blue-600 dark:text-blue-800 bg-slate-200 hover:bg-slate-500 hover:cursor-pointer">
+                      <Link to={`/edit/${task._id}`}>Edit</Link>
                     </h1>
                   </td>
 
                   <td className="py-4 px-1">
                     <h1
                       onClick={() => handleCompleteTask(task._id)}
-                      className="font-medium border-2 border-slate-400 px-0 text-center rounded-lg py-2 text-blue-600 dark:text-blue-700 bg-green-300 hover:bg-slate-500 hover:cursor-pointer"
+                      className="font-medium border-2 border-slate-400 px-2 text-center rounded-lg py-2 text-blue-600 dark:text-blue-700 bg-green-300 hover:bg-slate-500 hover:cursor-pointer"
                     >
-                      Complete Task
+                      Complete
                     </h1>
                   </td>
                 </tr>
