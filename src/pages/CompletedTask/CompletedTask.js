@@ -33,6 +33,24 @@ const CompletedTask = () => {
       });
   };
 
+  const handleDeleteTask = (_id) => {
+    let answer = window.confirm("Want to Delete the task?");
+    if (answer) {
+      let deleteUrl = `http://localhost:5000/delete?id=${_id}`;
+      fetch(deleteUrl, {
+        method: "DELETE",
+        headers: {},
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.modifiedCount > 0) {
+            // refetch();
+            toast.success("Deleted Successfully");
+          }
+        });
+    }
+  };
+
   return (
     <div
       className="dark:bg-slate-800 px-2 md:px-6 py-8 mx-1 md:mx-12 ring-1 ring-slate-900/5 shadow-xl"
@@ -77,7 +95,10 @@ const CompletedTask = () => {
                   )}...`}</td>
 
                   <td className="py-4 px-2">
-                    <h1 className="font-medium border-2 border-slate-400 px-0 text-center rounded-lg py-2 text-blue-600 dark:text-blue-800 bg-red-400 hover:bg-slate-500 hover:cursor-pointer">
+                    <h1
+                      onClick={() => handleDeleteTask(task._id)}
+                      className="font-medium border-2 border-slate-400 px-0 text-center rounded-lg py-2 text-blue-600 dark:text-blue-800 bg-red-400 hover:bg-slate-500 hover:cursor-pointer"
+                    >
                       Delete Task
                     </h1>
                   </td>

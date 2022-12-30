@@ -5,6 +5,9 @@ import { format } from "date-fns";
 const ViewDetails = () => {
   const task = useLoaderData();
   const postingDate = format(Date.parse(task?.creationTime), "Pp");
+  const deadline = task?.deadline
+    ? format(Date.parse(task?.deadline), "P")
+    : "";
   const createdBy = task?.createdEmail;
   return (
     <div
@@ -21,12 +24,20 @@ const ViewDetails = () => {
             <h1 className="text-blue-100 mt-8 text-lg">
               Description: {task?.description}
             </h1>
+
+            {deadline && (
+              <h1 className="text-red-300 mt-8 text-lg">
+                Deadline: {task?.deadline}
+              </h1>
+            )}
             <h1 className="text-blue-100 pt-3">
               Task Creation Time: {postingDate}
             </h1>
 
             {createdBy && (
-              <h1 className="mt-12 text-blue-300">Created By: {createdBy}</h1>
+              <h1 className="mt-12 text-blue-300 italic">
+                Created By: {createdBy}
+              </h1>
             )}
           </div>
           <div>

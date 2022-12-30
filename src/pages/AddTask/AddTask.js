@@ -46,6 +46,7 @@ const AddTask = () => {
             description: data.description,
             name: data.name,
             createdEmail: user?.email,
+            deadline: data.deadline,
             status: "not completed",
             creationTime: new Date(),
           };
@@ -73,6 +74,7 @@ const AddTask = () => {
         description: data.description,
         name: data.name,
         createdEmail: user?.email,
+        deadline: data.deadline,
         status: "not completed",
         creationTime: new Date(),
       };
@@ -154,8 +156,23 @@ const AddTask = () => {
               )}
             </div>
 
-            <div className="form-control w-full p-2 mb-3">
-              <div className="flex justify-center items-center max-w-lg">
+            <div className="form-control w-full p-2 mb-3 flex justify-between">
+              <div className="flex input-bordered rounded-none">
+                <label className="label">
+                  {" "}
+                  <span className="label-text text-white mr-1 md:mr-5">
+                    Estimated Deadline:
+                  </span>
+                </label>
+
+                <input
+                  type="text"
+                  {...register("deadline")}
+                  className="input input-bordered w-full rounded-none bg-slate-300"
+                />
+              </div>
+
+              <div className="flex justify-center items-center max-w-lg ml-4">
                 <label className="label">
                   {" "}
                   <span className="label-text text-white mr-1 md:mr-5">
@@ -177,7 +194,7 @@ const AddTask = () => {
 
             <div className="flex justify-center items-center">
               <input
-                className="bg-[#0DA5E9] p-3 md:w-80 w-64 rounded-md mt-1"
+                className="bg-[#0DA5E9] p-3 md:w-80 w-64 rounded-md mt-1 hover:cursor-pointer hover:bg-white"
                 value="Add Task"
                 type="submit"
               />
